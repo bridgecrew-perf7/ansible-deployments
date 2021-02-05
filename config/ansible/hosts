@@ -1,0 +1,7 @@
+localhost ansible_connection=local
+
+[all:vars]
+ansible_user=ben
+
+[centos]
+10.0.0.52
