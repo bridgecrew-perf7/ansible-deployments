@@ -6,9 +6,9 @@
     backup_base_dir: "/root/backups"
     script_source_base: "/data/code/tools/scripts/backup/nas_backups"
     scripts:
-      - {name: "backup_censt5secdev01p0_to_gimli.sh", config_folder: "censt5secdev01p0", configs: ["censt5secdev01p0_exclude.lst", "censt5secdev01p0_files.lst", "restic_censt5secdev01p0.pass"], cron_minute: "0", cron_hour: "21", cron_disabled: "no" }
-      - {name: "backup_gimli_to_aragorn.sh", config_folder: "gimli_to_aragorn", configs: ["gimli_local.lst", "gimli_local.pass"], cron_minute: "30", cron_hour: "12", cron_disabled: "yes" }
-      - { name: "backup_gimli_to_b2.sh", config_folder: "gimli_to_b2", configs: ["gimli_to_b2.lst", "gimli_to_b2.pass"], cron_minute: "0", cron_hour: "1", cron_day: "*/2", cron_disabled: "yes" }
+      - { name: "backup_censt5secdev01p0_to_gimli.sh", config_folder: "censt5secdev01p0", configs: ["censt5secdev01p0_exclude.lst", "censt5secdev01p0_files.lst", "restic_censt5secdev01p0.pass"], cron_minute: "0",  cron_hour: "21", cron_disabled: "no" }
+      - { name: "backup_gimli_to_aragorn.sh",          config_folder: "gimli_to_aragorn", configs: ["gimli_local.lst", "gimli_local.pass"],                                                        cron_minute: "30", cron_hour: "12", cron_disabled: "no" }
+      - { name: "backup_gimli_to_b2.sh",               config_folder: "gimli_to_b2",      configs: ["gimli_to_b2.lst", "gimli_to_b2.pass"],                                                        cron_minute: "0",  cron_hour: "1",  cron_day: "*/2", cron_disabled: "no" }
 
   tasks:
 
