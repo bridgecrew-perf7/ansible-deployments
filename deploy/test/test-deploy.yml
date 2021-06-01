@@ -1,7 +1,7 @@
 ---
 
 - hosts: centos
-  
+ 
   tasks:
 
     - name: Copy file
@@ -10,5 +10,5 @@
         dest: /tmp/test.txt
         mode: 0600
         owner: ben
-      become: yes
+      become: true
       become_user: root
