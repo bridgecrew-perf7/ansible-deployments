@@ -4,4 +4,4 @@ localhost ansible_connection=local
 ansible_user=ben
 
 [centos]
-10.0.0.52
+192.168.1.11
