@@ -14,7 +14,7 @@
           - "restic_censt5secdev01p0.pass"
         cron_minute: "0"
         cron_hour: "21"
-        cron_disabled: "yes"
+        cron_disabled: "no"
       - name: "backup_gimli_to_aragorn.sh"
         config_folder: "gimli_to_aragorn"
         configs:
@@ -22,7 +22,7 @@
           - "gimli_local.pass"
         cron_minute: "30"
         cron_hour: "12"
-        cron_disabled: "yes"
+        cron_disabled: "no"
       - name: "backup_gimli_to_b2.sh"
         config_folder: "gimli_to_b2"
         configs:
@@ -31,7 +31,7 @@
         cron_minute: "0"
         cron_hour: "1"
         cron_day: "*/2"
-        cron_disabled: "yes"
+        cron_disabled: "no"
 
   tasks:
 
