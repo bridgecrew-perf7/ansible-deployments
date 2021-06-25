@@ -35,6 +35,13 @@
 
   tasks:
 
+    - name: Install restic
+      yum:
+        name: restic
+        state: latest
+      become: true
+      become_user: root
+
     - name: Create backups folder
       file:
         path: "{{backup_base_dir}}"
