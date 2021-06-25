@@ -3,5 +3,35 @@
 - hosts: centos:rpi_all
 
   vars:
+    ssh_ca_file_path: /etc/ca/ca.pub
 
   tasks:
+
+    - name: Copy ca file
+      copy:
+        src: /data/code/configs/certonid/ca.pub
+        dest: /etc/ssh/ca.pub
+        owner: root
+        group: root
+        mode: 0600
+        backup: true
+      become: true
+      become_user: root
+
+    - name: Template TrustedUserCAKeys directive
+      blockinfile:
+        block: |
+          TrustedUserCAKeys /etc/ssh/ca.pub
+        dest: /etc/ssh/sshd_config
+        backup: true
+        validate: /usr/sbin/sshd -T -f %s
+      become: true
+      become_user: root
+
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
+        enabled: true
+      become: true
+      become_user: root

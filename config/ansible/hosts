@@ -2,9 +2,10 @@ localhost ansible_connection=local
 
 [all:vars]
 ansible_user=ben
+ansible_become_pass="{{ common_sudo_pass }}"
 
 [centos]
-192.168.1.11 ansible_become_pass="{{ ldap_pass }}"
+192.168.1.11
 
 [rpi_all]
-192.168.1.104 ansible_user=pi ansible_ssh_pass="{{ rpi_pass }}" ansible_become_pass="{{ rpi_pass }}"
+192.168.1.104
