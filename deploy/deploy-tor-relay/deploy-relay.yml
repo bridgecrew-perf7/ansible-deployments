@@ -1,0 +1,36 @@
+---
+
+- hosts: rpi_relay
+
+  vars:
+    torrc_home: /etc/tor/torrc
+    relay_config: /data/code/configs/tor_relay/torrc
+
+  tasks:
+
+    - name: Install tor
+      apt:
+        name: tor
+        update_cache: true
+        state: latest
+      become: true
+      become_user: root
+
+    - name: Deploy torrc
+      copy:
+        src: "{{ relay_config }}"
+        dest: "{{ torrc_home }}"
+        owner: root
+        group: root
+        mode: 0655
+        backup: true
+      become: true
+      become_user: root
+
+    - name: Restart Tor
+      service:
+        name: tor
+        state: restarted
+        enabled: true
+      become: true
+      become_user: root
