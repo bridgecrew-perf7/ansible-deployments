@@ -9,3 +9,6 @@ ansible_become_pass="{{ common_sudo_pass }}"
 
 [rpi_all]
 192.168.1.104
+
+[rpi_relay]
+192.168.1.104
