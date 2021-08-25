@@ -1,6 +1,6 @@
 ---
 
-- hosts: centos:rpi_all
+- hosts: rpi_all
 
   vars:
     ssh_ca_file_path: /etc/ca/ca.pub
