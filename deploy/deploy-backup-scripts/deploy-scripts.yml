@@ -4,7 +4,7 @@
 
   vars:
     backup_base_dir: "/root/backups"
-    script_source_base: "{{ playbook_dir }}../../..//tools/scripts/backup/nas_backups/"
+    script_source_base: "{{ playbook_dir }}/../../../tools/scripts/backup/nas_backups"
     scripts:
       - name: "backup_rpi-kenobi_to_gimli.sh"
         config_folder: "rpi-kenobi"
