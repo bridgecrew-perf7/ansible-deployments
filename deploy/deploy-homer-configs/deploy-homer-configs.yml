@@ -1,6 +1,6 @@
 ---
 
-- hosts: rpi-dooku
+- hosts: rpi-vader
 
   vars:
     configs_root: "{{ playbook_dir }}/../../../configs/homer"
