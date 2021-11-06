@@ -2,6 +2,9 @@
 
 - hosts: rpi-kenobi
 
+  vars_files:
+    - deploy-scripts-vault.yml
+
   vars:
     backup_base_dir: "/root/backups"
     script_source_base: "{{ playbook_dir }}/../../../tools/scripts/backup/nas_backups"
