@@ -1,0 +1,35 @@
+---
+
+- hosts: rpi-vader
+
+  vars:
+    configs_root: "{{ playbook_dir }}/../../../configs/homer"
+
+  tasks:
+
+    - name: Deploy config.yml
+      copy:
+        src: "{{ configs_root }}/config.yml"
+        dest: /srv/http/assets
+        owner: root
+        group: root
+        mode: 0544
+        backup: true
+      become: true
+
+    - name: Deploy Icons
+      copy:
+        src: "{{ configs_root }}/tools"
+        dest: /srv/http/assets
+        owner: root
+        group: root
+        mode: 0744
+        backup: true
+      become: true
+
+    - name: Restart HTTPD
+      systemd:
+        name: httpd
+        enabled: true
+        state: restarted
+      become: true
