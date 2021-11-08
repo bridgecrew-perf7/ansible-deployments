@@ -32,11 +32,6 @@
       - domains:
         - vader.bendavies.space
 
-  tasks:
-
-    - local_action:
-        command ansible-galaxy install -r requirements.yml --roles-path roles
-
   roles:
 
     - geerlingguy.certbot
