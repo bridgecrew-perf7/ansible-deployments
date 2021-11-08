@@ -1,0 +1,42 @@
+---
+
+- hosts: pihole
+
+  vars:
+
+    cloudflare_command_stub: "--dns-cloudflare --dns-cloudflare-credentials .cloudflare_dns"
+    key_type: ecdsa
+
+    certbot_auto_renew: true
+    certbot_create_if_missing: true
+    certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+    certbot_auto_renew_hour: "3"
+    certbot_auto_renew_minute: "30"
+    certbot_auto_renew_options: "--quiet --no-self-upgrade {{ cloudflare_command_stub }}"
+    certbot_install_method: snap
+    certbot_admin_email: "0x620x64@protonmail.com"
+    certbot_create_method: standalone
+    certbot_create_command: "{{ certbot_script }} certonly --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ cloudflare_command_stub }} --key-type {{ keytype }}  -d {{ cert_item.domains | join(',') }}"
+
+    certbot_certs:
+      - domains:
+        - dooku.bendavies.space
+      - domains:
+        - kenobi.bendavies.space
+      - domains:
+        - monitoring.bendavies.space
+      - domains:
+        - pihole.bendavies.space
+      - domains:
+        - unifi.bendavies.space
+      - domains:
+        - vader.bendavies.space
+
+  tasks:
+
+    - local_action:
+        command ansible-galaxy install -r requirements.yml --roles-path roles
+
+  roles:
+
+    - geerlingguy.certbot
