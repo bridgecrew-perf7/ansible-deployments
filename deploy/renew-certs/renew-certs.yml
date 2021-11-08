@@ -68,7 +68,7 @@
   tasks:
 
     - name: Copy cert file to remote
-      syncronize:
+      synchronize:
         src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
         dest: "{{ item.target_dir }}"
         mode: pull
