@@ -24,14 +24,55 @@
       - domains:
         - kenobi.bendavies.space
       - domains:
-        - monitoring.bendavies.space
-      - domains:
         - pihole.bendavies.space
       - domains:
         - unifi.bendavies.space
       - domains:
         - vader.bendavies.space
 
+    installed_cert_base: /etc/letsencrypt/live
+
+    installed_certs:
+
+      - name: dooku.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi-dooku
+
+      - name: kenobi.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi-kenobi
+
+      - name: pihole.bendavies.space
+        target_dir: /etc/lighttpd/.ssl
+        target_service: lighttpd
+        target_host: st2rspdns0001p0
+
+      - name: unifi.bendavies.space
+        target_dir: /data/unifi-core/config
+        target_service: unifi-core
+        target_host: unifi.bendavies.space
+
+      - name: vader.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi_vader
+
+
   roles:
 
     - { role: geerlingguy.certbot, become: yes }
+
+
+  tasks:
+
+    - name: Copy cert file to remote
+      syncronize:
+        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+        dest: "{{ item.target_dir }}"
+        mode: pull
+      become: true
+      delegate_to: "{{ item.target_host }}"
+      loop: "{{ installed_certs }}"
+
