@@ -67,6 +67,13 @@
 
   tasks:
 
+    - name: Install rsync
+      pacman:
+        name: rsync
+        state: latest
+      become: yes
+      when: ansible_os_family == 'Archlinux'
+
     - name: Copy cert file to remote
       synchronize:
         src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
