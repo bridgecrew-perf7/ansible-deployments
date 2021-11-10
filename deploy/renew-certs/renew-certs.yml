@@ -1,24 +1,6 @@
 ---
 
-- hosts: all
-
-  tasks:
-
-    - name: Install rsync
-      pacman:
-        name: rsync
-        state: latest
-      become: yes
-      when: ansible_os_family == 'Archlinux'
-
-    - name: Install askpass
-      pacman:
-        name: ssh-askpass
-        state: latest
-      become: yes
-      when: ansible_os_family == 'Archlinux'
-
-- hosts: pihole
+- hosts: rpi-dooku
 
   vars:
 
@@ -86,8 +68,8 @@
   tasks:
 
     - name: Copy cert file to remote
-      synchronize:
-        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+      copy:
+        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem.new"
         dest: "{{ item.target_dir }}"
         mode: pull
       become: true
