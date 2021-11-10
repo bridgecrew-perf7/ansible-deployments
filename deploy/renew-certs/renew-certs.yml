@@ -122,7 +122,7 @@
       command: cat {{ item.target_dir }}/privkey.pem {{ item.target_dir }}/fullchain.pem > {{ item.target_dir }}/pihole.bendavies.space
       become: true
       loop: "{{ installed_certs }}"
-      when: item.target_host == st2rspdns0001p0 and ansible_hostname == st2rspdns0001p0
+      when: item.target_host == "st2rspdns0001p0" and ansible_hostname == "st2rspdns0001p0"
 
     - name: Restart service 
       systemd:
