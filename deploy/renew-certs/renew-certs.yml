@@ -61,15 +61,15 @@
         target_service: lighttpd
         target_host: st2rspdns0001p0
 
-      - name: unifi.bendavies.space
-        target_dir: /data/unifi-core/config
-        target_service: unifi-core
-        target_host: unifi.bendavies.space
+        #      - name: unifi.bendavies.space
+        #        target_dir: /data/unifi-core/config
+        #        target_service: unifi-core
+        #        target_host: unifi.bendavies.space
 
       - name: vader.bendavies.space
         target_dir: /etc/httpd/ssl
         target_service: httpd
-        target_host: rpi_vader
+        target_host: rpi-vader
 
   pre_tasks:
 
@@ -92,8 +92,8 @@
 
     - name: Copy cert file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem.new"
-        dest: "{{ item.target_dir }}"
+        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+        dest: "{{ item.target_dir }}/fullchain.pem.new"
         mode: pull
       become: true
       delegate_to: "{{ item.target_host }}"
