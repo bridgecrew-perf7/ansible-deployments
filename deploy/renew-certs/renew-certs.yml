@@ -56,10 +56,10 @@
         target_service: httpd
         target_host: rpi-kenobi
 
-      - name: pihole.bendavies.space
-        target_dir: /etc/lighttpd/.ssl
-        target_service: lighttpd
-        target_host: st2rspdns0001p0
+        #- name: pihole.bendavies.space
+        #target_dir: /etc/lighttpd/.ssl
+        #target_service: lighttpd
+        #target_host: st2rspdns0001p0
 
         #      - name: unifi.bendavies.space
         #        target_dir: /data/unifi-core/config
@@ -93,11 +93,19 @@
     - name: Copy cert file to remote
       copy:
         src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
-        dest: "{{ item.target_dir }}/fullchain.pem.new"
+        dest: "{{ item.target_dir }}/fullchain.pem"
         mode: 0500
         owner: root
         group: root
       become: true
-      delegate_to: "{{ item.target_host }}"
       loop: "{{ installed_certs }}"
 
+    - name: Copy key file to remote
+      copy:
+        src: "{{ installed_cert_base }}/{{ item.name }}/server.key"
+        dest: "{{ item.target_dir }}/server.key"
+        mode: 0500
+        owner: root
+        group: root
+      become: true
+      loop: "{{ installed_certs }}"
