@@ -16,7 +16,7 @@
           32393835343132396439326262303133616161653661306631353230613436663733346663313462
           31666136343739663263343738396132376334356632666162313163396133306138
 
-    cloudflare_command_stub: "--dns-cloudflare --dns-cloudflare-credentials .cloudflare_dns"
+    cloudflare_command_stub: "--dns-cloudflare --dns-cloudflare-credentials /root/.cloudflare_dns"
     key_type: ecdsa
 
     certbot_auto_renew: true
