@@ -102,8 +102,8 @@
 
     - name: Copy key file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/server.key"
-        dest: "{{ item.target_dir }}/server.key"
+        src: "{{ installed_cert_base }}/{{ item.name }}/privkey.pem"
+        dest: "{{ item.target_dir }}/privkey.pem"
         mode: 0500
         owner: root
         group: root
