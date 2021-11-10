@@ -16,7 +16,7 @@
     certbot_install_method: snap
     certbot_admin_email: "0x620x64@protonmail.com"
     certbot_create_method: standalone
-    certbot_create_command: "{{ certbot_script }} certonly --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ cloudflare_command_stub }} --key-type {{ keytype }}  -d {{ cert_item.domains | join(',') }}"
+    certbot_create_command: "{{ certbot_script }} certonly --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ cloudflare_command_stub }} --key-type {{ key_type }}  -d {{ cert_item.domains | join(',') }}"
 
     certbot_certs:
       - domains:
