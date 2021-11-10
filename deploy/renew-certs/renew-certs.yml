@@ -94,7 +94,9 @@
       copy:
         src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
         dest: "{{ item.target_dir }}/fullchain.pem.new"
-        mode: pull
+        mode: 0500
+        owner: root
+        group: root
       become: true
       delegate_to: "{{ item.target_host }}"
       loop: "{{ installed_certs }}"
