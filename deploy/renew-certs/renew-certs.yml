@@ -78,7 +78,7 @@
         src: ./cloudflare_dns.j2
         dest: /root/.cloudflare_dns
         owner: root
-        group_root: root
+        group: root
         mode: 0700
         backup: true
       become: true
