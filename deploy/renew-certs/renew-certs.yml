@@ -11,6 +11,13 @@
       become: yes
       when: ansible_os_family == 'Archlinux'
 
+    - name: Install askpass
+      pacman:
+        name: ssh-askpass
+        state: latest
+      become: yes
+      when: ansible_os_family == 'Archlinux'
+
 - hosts: pihole
 
   vars:
