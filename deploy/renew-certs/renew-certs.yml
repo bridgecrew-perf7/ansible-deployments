@@ -42,6 +42,27 @@
       - domains:
         - vader.bendavies.space
 
+
+  pre_tasks:
+
+    - name: Template cloudlfare config
+      template:
+        src: ./cloudflare_dns.j2
+        dest: /root/.cloudflare_dns
+        owner: root
+        group: root
+        mode: 0700
+        backup: true
+      become: true
+
+  roles:
+
+    - { role: geerlingguy.certbot, become: yes }
+
+- hosts: all
+
+  vars:
+
     installed_cert_base: /etc/letsencrypt/live
 
     installed_certs:
@@ -70,24 +91,7 @@
         target_dir: /etc/httpd/ssl
         target_service: httpd
         target_host: rpi-vader
-
-  pre_tasks:
-
-    - name: Template cloudlfare config
-      template:
-        src: ./cloudflare_dns.j2
-        dest: /root/.cloudflare_dns
-        owner: root
-        group: root
-        mode: 0700
-        backup: true
-      become: true
-
-  roles:
-
-    - { role: geerlingguy.certbot, become: yes }
-
-
+  
   tasks:
 
     - name: Copy cert file to remote
@@ -97,8 +101,10 @@
         mode: 0500
         owner: root
         group: root
+        backup: true
       become: true
       loop: "{{ installed_certs }}"
+      when: item.target_host == ansible_hostname
 
     - name: Copy key file to remote
       copy:
@@ -107,5 +113,7 @@
         mode: 0500
         owner: root
         group: root
+        backup: true
       become: true
       loop: "{{ installed_certs }}"
+      when: item.target_host == ansible_hostname
