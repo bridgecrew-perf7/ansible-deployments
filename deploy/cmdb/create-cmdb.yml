@@ -10,6 +10,7 @@
     file:
       path: "{{ directory_cmdb }}"
       state: directory
+    delegate_to: localhost
 
   - name: Gather the package facts
     package_facts:
