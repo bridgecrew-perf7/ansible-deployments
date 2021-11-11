@@ -15,7 +15,7 @@
   - name: Copy ansible facts to a file
     copy:
       content: '{"ansible_facts": {{ ansible_facts | to_json }}}'
-      dest: '{{ directory_cmdb }}/{{ ansible_hostname }}.json'
+      dest: '{{ directory_cmdb }}/{{ ansible_hostname }}'
     delegate_to: localhost
 
   - name: Install ansible-cmdb
