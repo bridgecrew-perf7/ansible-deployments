@@ -12,20 +12,10 @@
       state: directory
     delegate_to: localhost
 
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  
-  - name: Copy ansible package facts to a file
-    copy:
-      content: "{{ ansible_facts.packages }}"
-      dest: '{{ directory_cmdb }}/{{ ansible_hostname }}_packages.json'
-    delegate_to: localhost
-
   - name: Copy ansible facts to a file
     copy:
       content: "{{ ansible_facts}}"
-      dest: '{{ directory_cmdb }}/{{ ansible_hostname}}_facts.json'
+      dest: '{{ directory_cmdb }}/{{ ansible_hostname }}.json'
     delegate_to: localhost
 
   - name: Install ansible-cmdb
