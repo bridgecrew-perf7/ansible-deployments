@@ -13,13 +13,13 @@
       state: directory
     delegate_to: localhost
 
-    - setup:
-      register: setup_res
+  - setup:
+    register: setup_res
 
-    - copy:
-        content: "{{ setup_res | to_nice_json }}"
-        dest: "{{ directory_cmdb }}/{{ inventory_hostname }}"
-      delegate_to: localhost
+  - copy:
+      content: "{{ setup_res | to_nice_json }}"
+      dest: "{{ directory_cmdb }}/{{ inventory_hostname }}"
+    delegate_to: localhost
 
   - name: Install ansible-cmdb
     pip:
@@ -32,4 +32,3 @@
     shell:
       cmd: ansible-cmdb --exclude-cols dtap,comment,custom,external_id {{ directory_cmdb }} > {{ cmdb_target }}
     delegate_to: localhost
-
