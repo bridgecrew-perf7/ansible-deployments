@@ -1,4 +1,5 @@
 - hosts: all
+  gather_facts: no
 
   vars:
     directory_cmdb: /tmp/ansible-cmdb
@@ -12,11 +13,13 @@
       state: directory
     delegate_to: localhost
 
-  - name: Copy ansible facts to a file
-    copy:
-      content: '{"ansible_facts": {{ ansible_facts | to_json }}}'
-      dest: '{{ directory_cmdb }}/{{ ansible_hostname }}'
-    delegate_to: localhost
+    - setup:
+      register: setup_res
+
+    - copy:
+        content: "{{ setup_res | to_nice_json }}"
+        dest: "{{ directory_cmdb }}/{{ inventory_hostname }}"
+      delegate_to: localhost
 
   - name: Install ansible-cmdb
     pip:
@@ -28,6 +31,5 @@
   - name: Generate CMDB
     shell:
       cmd: ansible-cmdb --exclude-cols dtap,comment,custom,external_id {{ directory_cmdb }} > {{ cmdb_target }}
-    become: true
     delegate_to: localhost
 
