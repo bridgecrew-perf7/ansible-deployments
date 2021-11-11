@@ -32,3 +32,9 @@
     shell:
       cmd: ansible-cmdb --exclude-cols dtap,comment,custom,external_id {{ directory_cmdb }} > {{ cmdb_target }}
     delegate_to: localhost
+
+  - name: Delete tmp dir
+    file:
+      path: "{{ directory_cmdb }}"
+      state: absent
+    become: true
