@@ -6,6 +6,11 @@
 
   tasks:
 
+  - name: Create tmp dir
+    file:
+      path: "{{ directory_cmdb }}"
+      state: directory
+
   - name: Gather the package facts
     package_facts:
       manager: auto
