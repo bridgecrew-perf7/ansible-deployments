@@ -14,7 +14,7 @@
 
   - name: Copy ansible facts to a file
     copy:
-      content: "{{ ansible_facts}}"
+      content: '{"ansible_facts": {{ ansible_facts | to_json }}}'
       dest: '{{ directory_cmdb }}/{{ ansible_hostname }}.json'
     delegate_to: localhost
 
