@@ -1,17 +1,20 @@
 ---
 
-- hosts: centos
+- hosts: rpi-kenobi
+
+  vars_files:
+    - deploy-scripts-vault.yml
 
   vars:
     backup_base_dir: "/root/backups"
-    script_source_base: "/data/code/tools/scripts/backup/nas_backups"
+    script_source_base: "{{ playbook_dir }}/../../../tools/scripts/backup/nas_backups"
     scripts:
-      - name: "backup_censt5secdev01p0_to_gimli.sh"
-        config_folder: "censt5secdev01p0"
+      - name: "backup_rpi-kenobi_to_gimli.sh"
+        config_folder: "rpi-kenobi"
         configs:
-          - "censt5secdev01p0_exclude.lst"
-          - "censt5secdev01p0_files.lst"
-          - "restic_censt5secdev01p0.pass"
+          - "rpi-kenobi_exclude.lst"
+          - "rpi-kenobi_files.lst"
+          - "restic_rpi-kenobi.pass"
         cron_minute: "0"
         cron_hour: "21"
         cron_disabled: "no"
@@ -36,7 +39,7 @@
   tasks:
 
     - name: Install restic
-      yum:
+      pacman:
         name: restic
         state: latest
       become: true
