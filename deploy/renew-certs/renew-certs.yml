@@ -82,10 +82,12 @@
         target_service: lighttpd
         target_host: st2rspdns0001p0
 
-        #      - name: unifi.bendavies.space
-        #        target_dir: /data/unifi-core/config
-        #        target_service: unifi-core
-        #        target_host: unifi.bendavies.space
+      - name: unifi.bendavies.space
+        target_dir: /data/unifi-core/config
+        target_service: unifi-core
+        cert_file_name: unifi-core.crt
+        key_file_name: unifi-core.key
+        target_host: unifi.bendavies.space
 
       - name: vader.bendavies.space
         target_dir: /etc/httpd/ssl
@@ -96,7 +98,7 @@
 
     - name: Copy cert file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+        src: "{{ installed_cert_base }}/{{ item.name }}/{{ item.cert_file_name | default('fullchain.pem') }}"
         dest: "{{ item.target_dir }}/fullchain.pem"
         mode: 0500
         owner: root
@@ -108,7 +110,7 @@
 
     - name: Copy key file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/privkey.pem"
+        src: "{{ installed_cert_base }}/{{ item.name }}/{{ item.key_file_name | default('privkey.pem') }}"
         dest: "{{ item.target_dir }}/privkey.pem"
         mode: 0500
         owner: root
