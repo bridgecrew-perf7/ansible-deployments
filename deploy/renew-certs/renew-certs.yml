@@ -59,7 +59,7 @@
 
     - { role: geerlingguy.certbot, become: yes }
 
-- hosts: all
+- hosts: all_hosts
 
   vars:
 
