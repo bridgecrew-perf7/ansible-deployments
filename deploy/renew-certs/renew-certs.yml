@@ -87,7 +87,7 @@
         target_service: unifi-core
         cert_file_name: unifi-core.crt
         key_file_name: unifi-core.key
-        target_host: unifi.bendavies.space
+        target_host: UniFi-CloudKey-Gen2-Plus
 
       - name: vader.bendavies.space
         target_dir: /etc/httpd/ssl
