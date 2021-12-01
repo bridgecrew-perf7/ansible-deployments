@@ -33,6 +33,6 @@
     - name: Start timesyncd
       service:
         name: systemd-timesyncd
-        state: started
+        state: restarted
         enabled: True
       become: True
