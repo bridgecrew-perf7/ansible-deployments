@@ -98,8 +98,8 @@
 
     - name: Copy cert file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/{{ item.cert_file_name | default('fullchain.pem') }}"
-        dest: "{{ item.target_dir }}/fullchain.pem"
+        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+        dest: "{{ item.target_dir }}/{{ item.cert_file_name | default('fullchain.pem') }}"
         mode: 0500
         owner: root
         group: root
@@ -110,8 +110,8 @@
 
     - name: Copy key file to remote
       copy:
-        src: "{{ installed_cert_base }}/{{ item.name }}/{{ item.key_file_name | default('privkey.pem') }}"
-        dest: "{{ item.target_dir }}/privkey.pem"
+        src: "{{ installed_cert_base }}/{{ item.name }}/privkey.pem"
+        dest: "{{ item.target_dir }}/{{ item.key_file_name | default('privkey.pem') }}"
         mode: 0500
         owner: root
         group: root
