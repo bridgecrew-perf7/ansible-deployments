@@ -1,0 +1,40 @@
+- hosts: all
+  gather_facts: no
+
+  vars:
+    directory_cmdb: /tmp/ansible-cmdb
+    cmdb_target: /srv/http/cmdb/index.html
+
+  tasks:
+
+  - name: Create tmp dir
+    file:
+      path: "{{ directory_cmdb }}"
+      state: directory
+    delegate_to: localhost
+
+  - setup:
+    register: setup_res
+
+  - copy:
+      content: "{{ setup_res | to_nice_json }}"
+      dest: "{{ directory_cmdb }}/{{ inventory_hostname }}"
+    delegate_to: localhost
+
+  - name: Install ansible-cmdb
+    pip:
+      name: ansible-cmdb
+      state: latest
+    become: true
+    delegate_to: localhost
+
+  - name: Generate CMDB
+    shell:
+      cmd: ansible-cmdb --exclude-cols dtap,comment,custom,external_id {{ directory_cmdb }} > {{ cmdb_target }}
+    delegate_to: localhost
+
+  - name: Delete tmp dir
+    file:
+      path: "{{ directory_cmdb }}"
+      state: absent
+    become: true

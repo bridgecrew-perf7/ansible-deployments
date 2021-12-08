@@ -1,0 +1,38 @@
+---
+
+- hosts: rpi_all
+
+  vars:
+    ntp_server: time.cloudflare.com
+    ntp_fallback: "0.arch.pool.ntp.org 1.arch.pool.ntp.org 2.arch.pool.ntp.org 3.arch.pool.ntp.org"
+    conf_location: /etc/systemd/timesyncd.conf
+
+
+  tasks:
+
+    - name: Template config file
+      template:
+        src: timesyncd.conf.j2
+        dest: "{{ conf_location }}"
+        backup: True
+        owner: root
+        group: root
+      become: True
+
+    - name: Init service vars
+      service_facts:
+    
+    - name: Stop ntpd
+      service:
+        name: ntpd.service
+        state: stopped
+        enabled: False
+      become: True
+      when: ansible_facts.services['ntpd.service'] is defined
+
+    - name: Start timesyncd
+      service:
+        name: systemd-timesyncd
+        state: restarted
+        enabled: True
+      become: True

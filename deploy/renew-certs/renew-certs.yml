@@ -1,0 +1,137 @@
+---
+
+- hosts: rpi-dooku
+
+  vars:
+
+    cloudflare_api_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36353638326666303032393235613232313639383130626361316464353835643631623464323532
+          3937306130356665386233386366373534343461323961630a303433306130623334396561343930
+          61346366303539633636663861623565316632623932623433623138353336393865356166356661
+          3433326333336633620a623632333064396465396563383761333933623536316233356161363832
+          61393162643833633436653439383639313234336234306265383835393234323931646136373335
+          63646136393661363465326565343735323337613062356661393933313632636432346331316338
+          32336630623966653332663066383834336261303830653132353534333539616464366566663564
+          32393835343132396439326262303133616161653661306631353230613436663733346663313462
+          31666136343739663263343738396132376334356632666162313163396133306138
+
+    cloudflare_command_stub: "--dns-cloudflare --dns-cloudflare-credentials /root/.cloudflare_dns"
+    key_type: ecdsa
+
+    certbot_auto_renew: true
+    certbot_create_if_missing: true
+    certbot_auto_renew_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+    certbot_auto_renew_hour: "3"
+    certbot_auto_renew_minute: "30"
+    certbot_auto_renew_options: "--quiet --no-self-upgrade {{ cloudflare_command_stub }}"
+    certbot_install_method: snap
+    certbot_admin_email: "0x620x64@protonmail.com"
+    certbot_create_method: standalone
+    certbot_create_command: "{{ certbot_script }} certonly --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ cloudflare_command_stub }} --key-type {{ key_type }}  -d {{ cert_item.domains | join(',') }}"
+
+    certbot_certs:
+      - domains:
+        - dooku.bendavies.space
+      - domains:
+        - kenobi.bendavies.space
+      - domains:
+        - pihole.bendavies.space
+      - domains:
+        - unifi.bendavies.space
+      - domains:
+        - vader.bendavies.space
+
+
+  pre_tasks:
+
+    - name: Template cloudlfare config
+      template:
+        src: ./cloudflare_dns.j2
+        dest: /root/.cloudflare_dns
+        owner: root
+        group: root
+        mode: 0700
+        backup: true
+      become: true
+
+  roles:
+
+    - { role: geerlingguy.certbot, become: yes }
+
+- hosts: all_hosts
+
+  vars:
+
+    installed_cert_base: /etc/letsencrypt/live
+
+    installed_certs:
+
+      - name: dooku.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi-dooku
+
+      - name: kenobi.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi-kenobi
+
+      - name: pihole.bendavies.space
+        target_dir: /etc/lighttpd/.ssl
+        target_service: lighttpd
+        target_host: st2rspdns0001p0
+
+      - name: unifi.bendavies.space
+        target_dir: /data/unifi-core/config
+        target_service: unifi-core
+        cert_file_name: unifi-core.crt
+        key_file_name: unifi-core.key
+        target_host: UniFi-CloudKey-Gen2-Plus
+
+      - name: vader.bendavies.space
+        target_dir: /etc/httpd/ssl
+        target_service: httpd
+        target_host: rpi-vader
+  
+  tasks:
+
+    - name: Copy cert file to remote
+      copy:
+        src: "{{ installed_cert_base }}/{{ item.name }}/fullchain.pem"
+        dest: "{{ item.target_dir }}/{{ item.cert_file_name | default('fullchain.pem') }}"
+        mode: 0500
+        owner: root
+        group: root
+        backup: true
+      become: true
+      loop: "{{ installed_certs }}"
+      when: item.target_host == ansible_hostname
+
+    - name: Copy key file to remote
+      copy:
+        src: "{{ installed_cert_base }}/{{ item.name }}/privkey.pem"
+        dest: "{{ item.target_dir }}/{{ item.key_file_name | default('privkey.pem') }}"
+        mode: 0500
+        owner: root
+        group: root
+        backup: true
+      become: true
+      loop: "{{ installed_certs }}"
+      when: item.target_host == ansible_hostname
+
+    - name: Construct pem file for lighttpd
+      shell: "cat {{ item.target_dir }}/privkey.pem {{ item.target_dir }}/fullchain.pem > {{ item.target_dir }}/pihole.bendavies.space.pem"
+      become: true
+      loop: "{{ installed_certs }}"
+      no_log: true
+      when: item.target_host == "st2rspdns0001p0" and ansible_hostname == "st2rspdns0001p0"
+
+    - name: Restart service 
+      systemd:
+        name: "{{ item.target_service }}"
+        enabled: true
+        state: restarted
+      become: true
+      loop: "{{ installed_certs }}"
+      when: item.target_host == ansible_hostname
